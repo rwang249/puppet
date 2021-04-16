@@ -1,0 +1,36 @@
+#!/bin/bash
+#
+# Init file for AppDynamics SDK Agent
+#
+# chkconfig: 2345 60 25
+# description: Apache Agent for AppDynamics
+
+
+#CHANGE ME: Set to the agent's install location
+AGENT="/opt/appdynamics-sdk-native/runSDKProxy.sh"
+
+#CHANGE ME: Set to the agent's log location
+LOG="/opt/appdynamics-sdk-native/logs/proxy.out"
+
+start()
+{
+nohup $AGENT >>/dev/null 2>$LOG &
+}
+
+stop()
+{
+ps -ef |egrep "appdynamics-sdk" |grep -v "egrep appdynamics-sdk"| awk '{print $2}' | xargs --no-run-if-empty kill -9
+}
+
+case "$1" in
+start)
+start
+;;
+
+stop)
+stop
+;;
+
+*)
+echo "Usage: $0 start|stop"
+esac
